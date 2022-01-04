@@ -6,7 +6,7 @@
   "types": "dist/index.d.ts",
   "repository": "lsndr/moject",
   "scripts": {
-    "build": "tsc",
+    "build": "rimraf ./dist && tsc",
     "test": "node --expose-gc node_modules/.bin/jest",
     "test:coverage": "node --expose-gc node_modules/.bin/jest --coverage --no-cache",
     "lint": "eslint \"**/*.{ts,js,json}\" --max-warnings=0",
@@ -44,6 +44,7 @@
   },
   "dependencies": {
     "inversify": "^6.0.1",
-    "reflect-metadata": "^0.1.13"
+    "reflect-metadata": "^0.1.13",
+    "rimraf": "^3.0.2"
   }
 }
