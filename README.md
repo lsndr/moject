@@ -15,7 +15,7 @@ import { WebModule } from './src/web.module.ts'
 const app = App.create(WebModule);
 
 (async () => {
-    await app.start();
+  await app.start();
 }).catch(console.error);
 ```
 
@@ -28,28 +28,28 @@ import { EXPRESS_APP_PROVIDER } from './constants';
 import { HelloController } from './hello.controller.ts';
 
 @Module({
-    hooks: [HelloController],
-    providers: [
-        {
-            identifier: EXPRESS_APP_PROVIDER,
-            userFactory: express
-        }
-    ]
+  hooks: [HelloController],
+  providers: [
+    {
+      identifier: EXPRESS_APP_PROVIDER,
+      userFactory: express
+    }
+  ]
 }) 
 export class WebModule {
-    constructor(@Inject(EXPRESS_APP_PROVIDER) private readonly app: Application) {}
+  constructor(@Inject(EXPRESS_APP_PROVIDER) private readonly app: Application) {}
 
-    private async afterInit() {
-        return new Promise((resolve, reject) => {
-            this.express.listen(80, (err) => {
-                if(err) {
-                    return reject(err);
-                }
+  private async afterInit() {
+    return new Promise((resolve, reject) => {
+      this.express.listen(80, (err) => {
+        if(err) {
+          return reject(err);
+        }
 
-                resolve();
-            });
-        });
-    }
+        resolve();
+      });
+    });
+  }
 }
 ```
 
@@ -62,13 +62,13 @@ import { EXPRESS_APP_PROVIDER } from './constants';
 
 @Injectable() 
 export class HelloController {
-    constructor(@Inject(EXPRESS_APP_PROVIDER) private readonly app: Application) {
-        app.on('/', this.helloWorld.bind(this));
-    }
+  constructor(@Inject(EXPRESS_APP_PROVIDER) private readonly app: Application) {
+    app.on('/', this.helloWorld.bind(this));
+  }
 
-    private helloWorld(req: Request, res: Response) {
-        res.send('Hello World!');
-    }
+  private helloWorld(req: Request, res: Response) {
+    res.send('Hello World!');
+  }
 }
 ```
 
@@ -93,13 +93,13 @@ For instance, hooks can be used to register routes of your web application.
 
 ```typescript
 @Module({
-    providers: [
-        AppClass,
-        {
-            identifier: 'APP_CLASS_2',
-            useClass: AppClass2
-        }
-    ]
+  providers: [
+    AppClass,
+    {
+      identifier: 'APP_CLASS_2',
+      useClass: AppClass2
+    }
+  ]
 })
 class AppModule {}
 ```
@@ -108,12 +108,12 @@ class AppModule {}
 
 ```typescript
 @Module({
-    providers: [{
-        identifier: 'FACTORY',
-        useFactory: () => {
-            return 'this string will be injected';
-        }
-    }]
+  providers: [{
+    identifier: 'FACTORY',
+    useFactory: () => {
+      return 'this string will be injected';
+    }
+  }]
 })
 class AppModule {}
 ```
@@ -122,10 +122,10 @@ class AppModule {}
 
 ```typescript
 @Module({
-    providers: [{
-        identifier: 'VALUE',
-        useValue: 'this value will be injected'
-    }]
+  providers: [{
+    identifier: 'VALUE',
+    useValue: 'this value will be injected'
+  }]
 })
 class AppModule {}
 ```
