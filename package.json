@@ -1,0 +1,49 @@
+{
+  "name": "moject",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "repository": "lsndr/moject",
+  "scripts": {
+    "build": "tsc",
+    "test": "node --expose-gc node_modules/.bin/jest",
+    "test:coverage": "node --expose-gc node_modules/.bin/jest --coverage --no-cache",
+    "lint": "eslint \"**/*.{ts,js,json}\" --max-warnings=0",
+    "lint:fix": "npm run lint -- --fix",
+    "lint:fix-staged": "lint-staged",
+    "prepublish": "npm run build"
+  },
+  "author": {
+    "name": "lsndr",
+    "email": "alexander@lsndr.me",
+    "url": "https://lsndr.me"
+  },
+  "license": "MIT",
+  "pre-commit": [
+    "test",
+    "lint:fix-staged"
+  ],
+  "lint-staged": {
+    "**/*.{ts,js,json}": "eslint --fix --max-warnings=0"
+  },
+  "devDependencies": {
+    "@types/jest": "^27.4.0",
+    "@typescript-eslint/eslint-plugin": "^5.9.0",
+    "@typescript-eslint/parser": "^5.9.0",
+    "eslint": "^8.6.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-json": "^3.1.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "jest": "^27.4.5",
+    "lint-staged": "^12.1.5",
+    "pre-commit": "^1.2.2",
+    "prettier": "^2.5.1",
+    "ts-jest": "^27.1.2",
+    "typescript": "^4.5.4"
+  },
+  "dependencies": {
+    "inversify": "^6.0.1",
+    "reflect-metadata": "^0.1.13"
+  }
+}
