@@ -1,5 +1,8 @@
 # Moject
 
+[![npm version](https://badge.fury.io/js/moject.svg)](https://badge.fury.io/js/moject)
+[![npm downloads/month](https://img.shields.io/npm/dm/moject.svg)](https://www.npmjs.com/package/moject)
+[![npm downloads](https://img.shields.io/npm/dt/moject.svg)](https://www.npmjs.com/package/moject)
 [![license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/lsndr/moject/blob/master/LICENSE.md)
 
 `Moject` is a __dependency injection__ and __app factory__ package built around the modules idea of Angular and NestJs. 
