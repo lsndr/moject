@@ -7,8 +7,8 @@
   "repository": "lsndr/moject",
   "scripts": {
     "build": "rimraf ./dist && tsc",
-    "test": "node --expose-gc node_modules/.bin/jest",
-    "test:coverage": "node --expose-gc node_modules/.bin/jest --coverage --no-cache",
+    "test": "node node_modules/.bin/jest",
+    "test:coverage": "node node_modules/.bin/jest --coverage --no-cache",
     "lint": "eslint \"**/*.{ts,js,json}\" --max-warnings=0",
     "lint:fix": "npm run lint -- --fix",
     "lint:fix-staged": "lint-staged",
