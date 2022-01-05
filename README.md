@@ -42,7 +42,7 @@ See [examples](https://github.com/lsndr/moject/tree/master/examples).
 ```typescript
 @Module({
   providers: [
-    AppClass,
+    AppClass2,
     {
       identifier: 'APP_CLASS_2',
       useClass: AppClass2
