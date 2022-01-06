@@ -14,11 +14,166 @@
   npm install moject 
 ```
 
-Use `@Module` decorator to define modules. Use `@Injectable` and `@Inject` decorators to define and inject dependencies.
+Use `@Module` decorator to define modules, `@Injectable` and `@Inject` decorators to define and inject dependencies.
 
 ## Examples
 
 See [examples](https://github.com/lsndr/moject/tree/master/examples).
+
+## Modules
+
+Each module is an isolated DI container. Modules can be used to group related dependencies. `Moject` doesn't dictate how to group dependencies, you can use module-per-feature, module-per-layer or any other approach. 
+
+`@Module` decorator is used to define a module:
+
+```typescript
+
+@Module({
+  imports: [/* modules to import */],
+  hooks: [/* hooks */],
+  providers: [/* providers */],
+  exports: [/* providers and modules to export */]
+})
+export class AppModule {
+  static async beforeStart() {
+    // invoked before application starts
+  }
+
+  static async beforeInit() {
+    // invoked beforo modules initialisation
+  }
+
+  async afterInit() {
+    // invoked after modules initialisation
+  }
+
+  async beforeHooks() {
+    // invoked before hooks
+  }
+
+  async afterHooks() {
+    // invoked after hooks
+  }
+
+  async beforeStop() {
+    // invoked before application stops
+  }
+
+  async afterStop() {
+    // invoked after application stops
+  }
+}
+```
+
+## Providers
+
+There are 3 types of providers: `class`, `factory` and `value`:
+
+```typescript
+@Module({
+  providers: [
+    // Class provider
+    {
+      identifier: 'APP_CLASS',
+      useClass: AppClass,
+    },
+    // Shortened syntax for class provider
+    AppClass,
+    // Factory provider
+    {
+      identifier: 'FACTORY',
+      useFactory: () => {
+        return new AppClass();
+      },
+    },
+    // Factory provider
+    {
+      identifier: 'FACTORY',
+      useFactory: () => {
+        return new AppClass();
+      },
+    },
+    // Value provider
+    {
+      identifier: 'VALUE',
+      useValue: 'value to inject',
+    },
+  ],
+})
+class AppModule {}
+```
+
+Each class provider must be marked with `@Injectable` decorator as shown below:
+
+```typescript
+@Injectable()
+class AppClass {}
+```
+
+Use `@Inject` decorator to inject a dependency by its identifier:
+
+```typescript
+@Injectable()
+class SomeOtherClass {
+  constructor(@Inject(AppClass) appClass: AppClass) {
+    // ...
+  }
+}
+```
+
+## Injection scopes
+
+* `SINGLETONE` A single instance of the provider is shared across the entire application. __This is the default scope__.
+
+* `TRANSIENT` Each consumer that injects a transient provider will receive a new, dedicated instance.
+
+```typescript
+@Module({
+  providers: [
+    // Singletone scope
+    {
+      identifier: SomeClass,
+      useClass: SomeClass,
+      scope: 'SINGLETONE'
+    },
+    // Transient scope
+    {
+      identifier: SomeOtherClass,
+      useClass: SomeClassClass,
+      scope: 'TRANSIENT'
+    },
+  ],
+})
+class AppModule {}
+```
+
+## Import/Exoprt
+
+Each module can import other modules and export its providers or imported modules.
+
+```typescript
+// Databse module
+
+@Module({
+  providers: [DB],
+  exports: [DB],
+})
+class DatabaseModule {}
+
+// App module
+
+@Module({
+  imports: [DatabaseModule],
+})
+class AppModule {
+  // Inject a provider imported from DatabaseModule
+  constructor(@Inject(DB) private gateway: DB) {}
+
+  async afterInit() {
+    await this.gateway.migrate();
+  }
+}
+```
 
 ## Hooks
 
@@ -28,55 +183,21 @@ For instance, hooks can be used to register routes of your web application.
 
 See [examples](https://github.com/lsndr/moject/tree/master/examples).
 
-## Injection scopes
+## App Factory
 
-* __TRANSIENT__ Each consumer that injects a transient provider will receive a new, dedicated instance.
-
-
-* __SINGLETONE__ A single instance of the provider is shared across the entire application.
-
-## Providers
-
-#### Class
+Use `App` class to initialise modules and run hooks as shown below:
 
 ```typescript
-@Module({
-  providers: [
-    AppClass2,
-    {
-      identifier: 'APP_CLASS_2',
-      useClass: AppClass2
-    }
-  ]
-})
-class AppModule {}
+import { AppModule } from './app.module';
+
+// Build app
+const app = App.create(AppModule);
+
+// Start app
+app.start().catch(console.error);
 ```
 
-#### Factory
-
-```typescript
-@Module({
-  providers: [{
-    identifier: 'FACTORY',
-    useFactory: () => {
-      return 'this string will be injected';
-    }
-  }]
-})
-class AppModule {}
-```
-
-#### Value
-
-```typescript
-@Module({
-  providers: [{
-    identifier: 'VALUE',
-    useValue: 'this value will be injected'
-  }]
-})
-class AppModule {}
-```
+Once `app.start` is called, all your modules get initialised, dependencies resolved, and hooks invoked.
 
 ## License
 
