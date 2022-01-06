@@ -40,7 +40,7 @@ export class AppModule {
   }
 
   static async beforeInit() {
-    // invoked beforo modules initialisation
+    // invoked before modules initialisation
   }
 
   async afterInit() {
