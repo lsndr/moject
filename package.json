@@ -1,6 +1,6 @@
 {
   "name": "moject",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Moject is a dependency injection and app factory package built around the modules idea of Angular and NestJs.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
