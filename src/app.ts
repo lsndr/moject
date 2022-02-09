@@ -4,9 +4,13 @@ import { ModuleContainer } from './modules/container';
 import { registry } from './registry';
 import { AppEvents, AppModuleConstructor } from './types';
 
+export type AppOptions = {
+  logger?: false;
+};
+
 export class App {
-  private readonly startedAt: number;
   private lastReportAt?: number;
+  private options: AppOptions;
 
   private constructor(
     private readonly containers: Map<
@@ -14,18 +18,23 @@ export class App {
       ModuleContainer<AppModuleConstructor>
     >,
     private readonly rootModule: AppModuleConstructor,
+    options?: AppOptions,
   ) {
-    this.startedAt = Date.now();
+    this.options = options || {};
   }
 
-  static create(rootModule: AppModuleConstructor) {
+  static create(rootModule: AppModuleConstructor, options?: AppOptions) {
     const builder = new ModuleBuilder<AppModuleConstructor>(registry);
     const containers = builder.build(rootModule);
 
-    return new this(containers, rootModule);
+    return new this(containers, rootModule, options);
   }
 
   private log(text: string) {
+    if (this.options.logger === false) {
+      return;
+    }
+
     const lastReportAt = Date.now();
     const diff = lastReportAt - (this.lastReportAt || 0);
 
