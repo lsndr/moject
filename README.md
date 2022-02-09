@@ -6,7 +6,7 @@
 [![npm downloads](https://img.shields.io/npm/dt/moject.svg)](https://www.npmjs.com/package/moject)
 [![license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/lsndr/moject/blob/master/LICENSE.md)
 
-`Moject` is a __dependency injection__ and __app factory__ package built around the modules idea of Angular and NestJs. 
+`Moject` is an __IoC container__ and an __app factory__ package built around the modules idea of Angular and NestJs. 
 
 ## Usage
 
