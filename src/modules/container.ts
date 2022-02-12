@@ -8,13 +8,17 @@ import {
   Provider,
 } from './types';
 
-export class ModuleContainer<C extends ModuleConstructor> {
+const containersMap: WeakMap<ModuleContainer, Container> = new WeakMap();
+
+export class ModuleContainer<C extends ModuleConstructor = ModuleConstructor> {
   module?: InstanceType<C>;
   private readonly container: Container;
 
   constructor(readonly moduleConstructor: C, readonly meta: ModuleMeta<C>) {
     this.container = new Container({ skipBaseClassChecks: true });
     this.container.bind(moduleConstructor).toSelf().inSingletonScope();
+
+    containersMap.set(this, this.container);
 
     for (let i = 0; i < meta.providers.length; i++) {
       const provider = meta.providers[i];
@@ -81,6 +85,16 @@ export class ModuleContainer<C extends ModuleConstructor> {
     } else {
       this.container.bind(identifier).to(provider);
     }
+  }
+
+  setParent(parentContainer: ModuleContainer) {
+    const container = containersMap.get(parentContainer);
+
+    if (!container) {
+      throw new Error('Invalid container');
+    }
+
+    this.container.parent = container;
   }
 
   get<T = any>(identifier: ProviderIdentifier): Promise<T> {

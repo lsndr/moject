@@ -199,6 +199,25 @@ app.start().catch(console.error);
 
 Once `app.start` is called, all your modules get initialised, dependencies resolved, and hooks invoked.
 
+## Logger
+
+`Moject` provides you with a built-in logger, that can be used across the entire app:
+
+```typescript
+import { AppLogger, IDENTIFIERS } from 'moject';
+
+@Module()
+class AppModule {
+  constructor(@Inject(IDENTIFIERS.LOGGER) private readonly logger: AppLogger) {
+    this.logger.log('Hello, world!');
+  }
+}
+```
+
+There is no need to export or provide the logger. Just inject it in your code as shown above.
+
+If you use `debug` method of the logger, don't forget to set `NODE_DEBUG` env variable in order to see debug messages.
+
 ## License
 
 Moject is [MIT licensed](LICENSE.md).

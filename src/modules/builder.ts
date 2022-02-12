@@ -1,5 +1,8 @@
+import { BuildOptions } from '.';
 import { ModuleContainer } from './container';
 import { ModuleConstructor, ModuleMeta } from './types';
+
+class GlobalModule {}
 
 export class ModuleBuilder<C extends ModuleConstructor> {
   private readonly registry: Map<C, ModuleMeta<C>>;
@@ -18,8 +21,14 @@ export class ModuleBuilder<C extends ModuleConstructor> {
     });
   }
 
-  private buildContainers(rootModuleConstructor: C) {
+  private buildContainers(rootModuleConstructor: C, options?: BuildOptions) {
     const containers: Map<C, ModuleContainer<C>> = new Map();
+    const globalContainer = new ModuleContainer(GlobalModule, {
+      imports: [],
+      providers: options?.globalProviders || [],
+      hooks: [],
+      exports: [],
+    });
 
     const build = (moduleConstructor: C) => {
       if (containers.has(moduleConstructor)) {
@@ -33,6 +42,7 @@ export class ModuleBuilder<C extends ModuleConstructor> {
       }
 
       const container = new ModuleContainer(moduleConstructor, meta);
+      container.setParent(globalContainer);
 
       containers.set(moduleConstructor, container);
 
@@ -86,8 +96,8 @@ export class ModuleBuilder<C extends ModuleConstructor> {
     }
   }
 
-  build(rootModule: C) {
-    const containers = this.buildContainers(rootModule);
+  build(rootModule: C, options?: BuildOptions) {
+    const containers = this.buildContainers(rootModule, options);
     this.connectContainers(containers);
 
     return containers;

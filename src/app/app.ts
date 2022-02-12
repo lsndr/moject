@@ -1,16 +1,14 @@
-import { ProviderIdentifier } from './modules';
-import { ModuleBuilder } from './modules/builder';
-import { ModuleContainer } from './modules/container';
-import { registry } from './registry';
-import { AppEvents, AppModuleConstructor } from './types';
-
-export type AppOptions = {
-  logger?: false;
-};
+import { IDENTIFIERS } from '.';
+import { ProviderIdentifier } from './../modules';
+import { ModuleBuilder } from './../modules/builder';
+import { ModuleContainer } from './../modules/container';
+import { registry } from './../registry';
+import { Logger } from './services/logger';
+import { AppEvents, AppOptions, AppModuleConstructor } from './types';
 
 export class App {
   private lastReportAt?: number;
-  private options: AppOptions;
+  private options: Required<AppOptions>;
 
   private constructor(
     private readonly containers: Map<
@@ -20,12 +18,17 @@ export class App {
     private readonly rootModule: AppModuleConstructor,
     options?: AppOptions,
   ) {
-    this.options = options || {};
+    this.options = {
+      logger: new Logger(),
+      ...options,
+    };
   }
 
   static create(rootModule: AppModuleConstructor, options?: AppOptions) {
     const builder = new ModuleBuilder<AppModuleConstructor>(registry);
-    const containers = builder.build(rootModule);
+    const containers = builder.build(rootModule, {
+      globalProviders: [{ identifier: IDENTIFIERS.LOGGER, useClass: Logger }],
+    });
 
     return new this(containers, rootModule, options);
   }
@@ -38,8 +41,7 @@ export class App {
     const lastReportAt = Date.now();
     const diff = lastReportAt - (this.lastReportAt || 0);
 
-    console.log(
-      new Date(),
+    this.options.logger.log(
       text,
       typeof this.lastReportAt !== 'undefined'
         ? `\x1b[33m+${diff}ms\x1b[0m`
@@ -54,7 +56,7 @@ export class App {
       await container.getModule();
 
       this.log(
-        `\x1b[33m[${container.moduleConstructor.name}]\x1b[0m \x1b[32mDependencies initialized\x1b[0m`,
+        `Dependencies of \`${container.moduleConstructor.name}\` initialized`,
       );
     }
   }
@@ -83,9 +85,7 @@ export class App {
       }
     }
 
-    this.log(
-      `\x1b[33m[Application]\x1b[0m \x1b[32mRunned \`${event}\` event handlers\x1b[0m`,
-    );
+    this.log(`Runned \`${event}\` event handlers`);
   }
 
   get<T = any>(identifier: ProviderIdentifier): Promise<T> {
@@ -99,9 +99,7 @@ export class App {
   }
 
   async start() {
-    this.log(
-      '\x1b[33m[Application]\x1b[0m \x1b[32mStarting application...\x1b[0m',
-    );
+    this.log('Starting application...');
 
     await this.runEventHandlers('beforeStart');
     await this.runEventHandlers('beforeInit');
@@ -116,19 +114,15 @@ export class App {
     await this.runEventHandlers('afterHooks');
     await this.runEventHandlers('afterStart');
 
-    this.log(
-      '\x1b[33m[Application]\x1b[0m \x1b[32mApplication is running\x1b[0m',
-    );
+    this.log('Application is running');
   }
 
   async stop() {
-    this.log(
-      '\x1b[33m[Application]\x1b[0m \x1b[32mStopping application...\x1b[0m',
-    );
+    this.log('Stopping application');
 
     await this.runEventHandlers('beforeStop');
     await this.runEventHandlers('afterStop');
 
-    this.log('\x1b[33m[Application]\x1b[0m \x1b[32mApplication stopped\x1b[0m');
+    this.log('Application stopped=');
   }
 }

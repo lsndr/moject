@@ -1,7 +1,7 @@
 import { injectable, inject, decorate } from 'inversify';
 import { ModuleMeta, ProviderIdentifier } from './modules';
 import { registry } from './registry';
-import { AppModuleConstructor } from './types';
+import { AppModuleConstructor } from './app/types';
 
 export function Inject(
   identifier: ProviderIdentifier,

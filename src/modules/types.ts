@@ -1,5 +1,9 @@
 import { Container } from 'inversify';
 
+export type BuildOptions = {
+  globalProviders?: Provider[];
+};
+
 export type Constructor<T = unknown> = new (...args: never[]) => T;
 
 export type Module = object;
