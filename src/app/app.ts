@@ -8,7 +8,6 @@ import { AppEvents, AppOptions, AppModuleConstructor } from './types';
 
 export class App {
   private lastReportAt?: number;
-  private options: Required<AppOptions>;
 
   private constructor(
     private readonly containers: Map<
@@ -16,21 +15,24 @@ export class App {
       ModuleContainer<AppModuleConstructor>
     >,
     private readonly rootModule: AppModuleConstructor,
-    options?: AppOptions,
-  ) {
-    this.options = {
-      logger: new Logger(),
-      ...options,
-    };
-  }
+    private readonly options: Required<AppOptions>,
+  ) {}
 
   static create(rootModule: AppModuleConstructor, options?: AppOptions) {
+    const defaultLogger = new Logger();
+    const config: Required<AppOptions> = {
+      logger: defaultLogger,
+      ...options,
+    };
+
+    const logger = config.logger || defaultLogger;
+
     const builder = new ModuleBuilder<AppModuleConstructor>(registry);
     const containers = builder.build(rootModule, {
-      globalProviders: [{ identifier: IDENTIFIERS.LOGGER, useClass: Logger }],
+      globalProviders: [{ identifier: IDENTIFIERS.LOGGER, useValue: logger }],
     });
 
-    return new this(containers, rootModule, options);
+    return new this(containers, rootModule, config);
   }
 
   private log(text: string) {
