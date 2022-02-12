@@ -1,4 +1,5 @@
-import { Module } from './modules';
+import { Module } from '../modules';
+import { AppLogger } from './services';
 
 export type AppEvents =
   | 'beforeStart'
@@ -16,3 +17,7 @@ export interface AppModuleConstructor {
   beforeInit?: AppEventHandler;
   new (...args: any): AppModule;
 }
+
+export type AppOptions = {
+  logger?: AppLogger | false;
+};

@@ -6,7 +6,7 @@
 [![npm downloads](https://img.shields.io/npm/dt/moject.svg)](https://www.npmjs.com/package/moject)
 [![license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/lsndr/moject/blob/master/LICENSE.md)
 
-`Moject` is a __dependency injection__ and __app factory__ package built around the modules idea of Angular and NestJs. 
+`Moject` is an __IoC container__ and an __app factory__ package built around the modules idea of Angular and NestJs. 
 
 ## Usage
 
@@ -40,7 +40,7 @@ export class AppModule {
   }
 
   static async beforeInit() {
-    // invoked beforo modules initialisation
+    // invoked before modules initialisation
   }
 
   async afterInit() {
@@ -198,6 +198,25 @@ app.start().catch(console.error);
 ```
 
 Once `app.start` is called, all your modules get initialised, dependencies resolved, and hooks invoked.
+
+## Logger
+
+`Moject` provides you with a built-in logger, that can be used across the entire app:
+
+```typescript
+import { AppLogger, IDENTIFIERS } from 'moject';
+
+@Module()
+class AppModule {
+  constructor(@Inject(IDENTIFIERS.LOGGER) private readonly logger: AppLogger) {
+    this.logger.log('Hello, world!');
+  }
+}
+```
+
+There is no need to import or provide the logger. Just inject it in your code as shown above.
+
+If you use `debug` method of the logger, don't forget to set `NODE_DEBUG` env variable in order to see debug messages.
 
 ## License
 
