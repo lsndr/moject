@@ -214,7 +214,7 @@ class AppModule {
 }
 ```
 
-There is no need to export or provide the logger. Just inject it in your code as shown above.
+There is no need to import or provide the logger. Just inject it in your code as shown above.
 
 If you use `debug` method of the logger, don't forget to set `NODE_DEBUG` env variable in order to see debug messages.
 
