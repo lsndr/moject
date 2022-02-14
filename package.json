@@ -1,6 +1,6 @@
 {
   "name": "moject",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Moject is a dependency injection and app factory package built around the modules idea of Angular and NestJs.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -21,7 +21,8 @@
   },
   "license": "MIT",
   "pre-commit": [
-    "lint:fix-staged"
+    "lint:fix-staged",
+    "test"
   ],
   "lint-staged": {
     "**/*.{ts,js,json}": "eslint --fix --max-warnings=0"
@@ -38,11 +39,11 @@
     "pre-commit": "^1.2.2",
     "prettier": "^2.5.1",
     "ts-jest": "^27.1.2",
-    "typescript": "^4.5.4"
+    "typescript": "^4.5.4",
+    "rimraf": "^3.0.2"
   },
   "dependencies": {
     "inversify": "^6.0.1",
-    "reflect-metadata": "^0.1.13",
-    "rimraf": "^3.0.2"
+    "reflect-metadata": "^0.1.13"
   }
 }
