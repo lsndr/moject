@@ -68,4 +68,20 @@ describe('Provider', () => {
       'No matching bindings found for serviceIdentifier: UNKNOWN_IDENTIFIER',
     );
   });
+
+  it('should fail to resolve a class that not marked with @Injectable decorator', async () => {
+    class TestClass {}
+
+    @Module({
+      providers: [TestClass],
+    })
+    class TestModule {}
+
+    const app = App.create(TestModule);
+    const testInstance = app.get(TestClass);
+
+    expect(testInstance).rejects.toThrow(
+      'Missing required @injectable annotation in: TestClass.',
+    );
+  });
 });
