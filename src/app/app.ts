@@ -70,7 +70,7 @@ export class App {
 
         await container.resolve(hook);
 
-        this.log(`\x1b[33m[${hook.name}]\x1b[0m \x1b[32mHook invoked\x1b[0m`);
+        this.log(`Hook \`${hook.name}\` invoked`);
       }
     }
   }
