@@ -1,6 +1,88 @@
-import { Module, App, Injectable } from '../src';
+import { Module, App, Injectable, Provider } from '../';
 
-describe('Provider', () => {
+describe('App', () => {
+  it('should invoke hooks on start', async () => {
+    let hooksInvoked = 0;
+
+    @Injectable()
+    class Hook1 {
+      constructor() {
+        hooksInvoked++;
+      }
+    }
+
+    @Injectable()
+    class Hook2 {
+      constructor() {
+        hooksInvoked++;
+      }
+    }
+
+    @Module({
+      hooks: [Hook1, Hook2],
+    })
+    class TestModule {}
+
+    const app = App.create(TestModule, {
+      logger: false,
+    });
+
+    await app.start();
+
+    expect(hooksInvoked).toBe(2);
+  });
+
+  it('should return an imported value', async () => {
+    const providers: Provider[] = [
+      {
+        identifier: 'VALUE_IDENTIFIER',
+        useValue: 'testvalue',
+      },
+    ];
+
+    @Module({
+      providers,
+      exports: providers,
+    })
+    class Test1Module {}
+
+    @Module({
+      imports: [Test1Module],
+    })
+    class Test2Module {}
+
+    const app = App.create(Test2Module);
+    const testValue = await app.get('VALUE_IDENTIFIER');
+
+    expect(testValue).toBe('testvalue');
+  });
+
+  it('should fail to return a value, that was not exported', async () => {
+    const providers: Provider[] = [
+      {
+        identifier: 'VALUE_IDENTIFIER',
+        useValue: 'testvalue',
+      },
+    ];
+
+    @Module({
+      providers,
+    })
+    class Test1Module {}
+
+    @Module({
+      imports: [Test1Module],
+    })
+    class Test2Module {}
+
+    const app = App.create(Test2Module);
+    const testValue = app.get('VALUE_IDENTIFIER');
+
+    expect(testValue).rejects.toThrow(
+      'No matching bindings found for serviceIdentifier: VALUE_IDENTIFIER',
+    );
+  });
+
   it('should return a value', async () => {
     @Module({
       providers: [
