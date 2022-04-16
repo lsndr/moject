@@ -1,6 +1,76 @@
 import { Module, App, Injectable, Provider } from '../';
 
 describe('App', () => {
+  it('should log start process', async () => {
+    const logger = {
+      log: jest.fn(),
+      error: jest.fn(),
+      warn: jest.fn(),
+      debug: jest.fn(),
+    };
+
+    @Injectable()
+    class Hook {}
+
+    @Module({
+      hooks: [],
+    })
+    class TestModule1 {}
+
+    @Module({
+      imports: [TestModule1],
+      hooks: [Hook],
+    })
+    class TestModule2 {}
+
+    const app = App.create(TestModule2, {
+      logger,
+    });
+
+    await app.start();
+
+    expect(logger.log).toBeCalledTimes(11);
+    expect(logger.error).toBeCalledTimes(0);
+    expect(logger.warn).toBeCalledTimes(0);
+    expect(logger.debug).toBeCalledTimes(0);
+  });
+
+  it('should log stop process', async () => {
+    const logger = {
+      log: jest.fn(),
+      error: jest.fn(),
+      warn: jest.fn(),
+      debug: jest.fn(),
+    };
+
+    @Injectable()
+    class Hook {}
+
+    @Module({
+      hooks: [],
+    })
+    class TestModule1 {}
+
+    @Module({
+      imports: [TestModule1],
+      hooks: [Hook],
+    })
+    class TestModule2 {}
+
+    const app = App.create(TestModule2, {
+      logger,
+    });
+
+    await app.start();
+    logger.log.mockReset();
+    app.stop();
+
+    expect(logger.log).toBeCalledTimes(1);
+    expect(logger.error).toBeCalledTimes(0);
+    expect(logger.warn).toBeCalledTimes(0);
+    expect(logger.debug).toBeCalledTimes(0);
+  });
+
   it('should invoke hooks on start', async () => {
     let hooksInvoked = 0;
 
