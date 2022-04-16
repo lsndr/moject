@@ -11,7 +11,7 @@ import {
 const containersMap: WeakMap<ModuleContainer, Container> = new WeakMap();
 
 export class ModuleContainer<C extends ModuleConstructor = ModuleConstructor> {
-  module?: InstanceType<C>;
+  private module?: InstanceType<C>;
   private readonly container: Container;
 
   constructor(readonly moduleConstructor: C, readonly meta: ModuleMeta<C>) {
@@ -70,7 +70,7 @@ export class ModuleContainer<C extends ModuleConstructor = ModuleConstructor> {
     }
   }
 
-  isProviderConstructor(value: Provider): value is ProviderConstructor {
+  private isProviderConstructor(value: Provider): value is ProviderConstructor {
     return (
       typeof value === 'object' &&
       value !== null &&
