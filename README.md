@@ -1,6 +1,6 @@
 # Moject
 
-[![CI](https://github.com/lsndr/moject/actions/workflows/testing-ci.yml/badge.svg)](https://github.com/lsndr/moject/actions/workflows/testing-ci.yml)
+[![codecov](https://codecov.io/gh/lsndr/moject/branch/master/graph/badge.svg?token=N6K19AYFRO)](https://codecov.io/gh/lsndr/moject)
 [![npm version](https://badge.fury.io/js/moject.svg)](https://badge.fury.io/js/moject)
 [![npm downloads/month](https://img.shields.io/npm/dm/moject.svg)](https://www.npmjs.com/package/moject)
 [![npm downloads](https://img.shields.io/npm/dt/moject.svg)](https://www.npmjs.com/package/moject)
