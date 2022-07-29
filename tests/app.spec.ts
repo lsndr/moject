@@ -1,4 +1,4 @@
-import { Module, App, Injectable, Provider } from '../';
+import { Module, App, Injectable, Provider, createModule } from '../src';
 
 describe('App', () => {
   it('should log start process', async () => {
@@ -192,5 +192,19 @@ describe('App', () => {
     expect(testInstance).rejects.toThrow(
       'Missing required @injectable annotation in: TestClass.',
     );
+  });
+
+  it('should properly resolve dynamic module providers', async () => {
+    @Injectable()
+    class ClassToInject {}
+
+    const dynamicModule = createModule(class {}, {
+      providers: [ClassToInject],
+    });
+
+    const app = App.create(dynamicModule);
+    const testInstance = await app.get(ClassToInject);
+
+    expect(testInstance).toBeInstanceOf(ClassToInject);
   });
 });

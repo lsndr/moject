@@ -1,7 +1,7 @@
 import { Container } from 'inversify';
 import {
   Constructor,
-  ModuleConstructor,
+  Module,
   ModuleMeta,
   ProviderIdentifier,
   ProviderConstructor,
@@ -10,7 +10,7 @@ import {
 
 const containersMap: WeakMap<ModuleContainer, Container> = new WeakMap();
 
-export class ModuleContainer<C extends ModuleConstructor = ModuleConstructor> {
+export class ModuleContainer<C extends Module = Module> {
   private module?: InstanceType<C>;
   private readonly container: Container;
 

@@ -1,4 +1,4 @@
-import { Logger } from './logger';
+import { Logger } from '../src';
 import * as util from 'util';
 
 describe('Logger', () => {

@@ -2,23 +2,20 @@ import { IDENTIFIERS } from '.';
 import { ProviderIdentifier } from './../modules';
 import { ModuleBuilder } from './../modules/builder';
 import { ModuleContainer } from './../modules/container';
-import { registry } from './../registry';
+import { registry } from './registry';
 import { Logger } from './services/logger';
-import { AppEvents, AppOptions, ModuleConstructor } from './types';
+import { AppEvents, AppOptions, Module } from './types';
 
 export class App {
   private lastReportAt?: number;
 
   private constructor(
-    private readonly containers: Map<
-      ModuleConstructor,
-      ModuleContainer<ModuleConstructor>
-    >,
-    private readonly rootModule: ModuleConstructor,
+    private readonly containers: Map<Module, ModuleContainer<Module>>,
+    private readonly rootModule: Module,
     private readonly options: Required<AppOptions>,
   ) {}
 
-  static create(rootModule: ModuleConstructor, options?: AppOptions) {
+  static create(rootModule: Module, options?: AppOptions) {
     const defaultLogger = new Logger();
     const config: Required<AppOptions> = {
       logger: defaultLogger,
@@ -27,7 +24,7 @@ export class App {
 
     const logger = config.logger || defaultLogger;
 
-    const builder = new ModuleBuilder<ModuleConstructor>(registry);
+    const builder = new ModuleBuilder<Module>(registry);
     const containers = builder.build(rootModule, {
       globalProviders: [{ identifier: IDENTIFIERS.LOGGER, useValue: logger }],
     });

@@ -16,5 +16,5 @@ export {
   AppLogger,
   AppOptions,
   ModuleMeta,
+  createModule,
 } from './app';
-export { createModule } from './create-module';

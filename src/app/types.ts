@@ -1,4 +1,7 @@
-import { Module as BaseModule, ModuleMeta as BaseModuleMeta } from '../modules';
+import {
+  ModuleInstace as BaseModuleInstance,
+  ModuleMeta as BaseModuleMeta,
+} from '../modules';
 import { AppLogger } from './services';
 
 export type AppEvents =
@@ -11,15 +14,16 @@ export type AppEvents =
 
 export type AppEventHandler = () => unknown;
 
-export type Module = BaseModule & Partial<Record<AppEvents, AppEventHandler>>;
+export type ModuleInstance = BaseModuleInstance &
+  Partial<Record<AppEvents, AppEventHandler>>;
 
-export interface ModuleConstructor {
+export interface Module {
   beforeStart?: AppEventHandler;
   beforeInit?: AppEventHandler;
-  new (...args: any): Module;
+  new (...args: any): ModuleInstance;
 }
 
-export type ModuleMeta = BaseModuleMeta<ModuleConstructor>;
+export type ModuleMeta = BaseModuleMeta<Module>;
 
 export type AppOptions = {
   logger?: AppLogger | false;

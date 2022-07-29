@@ -1,10 +1,10 @@
 import { BuildOptions } from '.';
 import { ModuleContainer } from './container';
-import { ModuleConstructor, ModuleMeta } from './types';
+import { Module, ModuleMeta } from './types';
 
 class GlobalModule {}
 
-export class ModuleBuilder<C extends ModuleConstructor> {
+export class ModuleBuilder<C extends Module> {
   private readonly registry: Map<C, ModuleMeta<C>>;
 
   constructor(registry: Map<C, ModuleMeta<C>>) {
