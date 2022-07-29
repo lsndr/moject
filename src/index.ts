@@ -9,5 +9,12 @@ export {
   FactoryProviderConstructor,
   ProviderIdentifier,
 } from './modules';
-export { App, IDENTIFIERS, AppLogger, AppOptions, ModuleMeta } from './app';
+export {
+  App,
+  IDENTIFIERS,
+  Logger,
+  AppLogger,
+  AppOptions,
+  ModuleMeta,
+} from './app';
 export { createModule } from './create-module';
