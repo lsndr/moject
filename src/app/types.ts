@@ -1,8 +1,8 @@
 import {
   ModuleInstace as BaseModuleInstance,
   ModuleMeta as BaseModuleMeta,
-} from '../modules';
-import { AppLogger } from './services';
+} from '../modules/types';
+import { AppLogger } from './services/logger';
 
 export type AppEvents =
   | 'beforeStart'

@@ -1,6 +1,5 @@
-import { BuildOptions } from '.';
+import { BuildOptions, Module, ModuleMeta } from './types';
 import { ModuleContainer } from './container';
-import { Module, ModuleMeta } from './types';
 
 class GlobalModule {}
 

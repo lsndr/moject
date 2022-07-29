@@ -1,5 +1,5 @@
-import { IDENTIFIERS } from '.';
-import { ProviderIdentifier } from './../modules';
+import { IDENTIFIERS } from './identifiers';
+import { ProviderIdentifier } from '../modules/types';
 import { ModuleBuilder } from './../modules/builder';
 import { ModuleContainer } from './../modules/container';
 import { registry } from './registry';

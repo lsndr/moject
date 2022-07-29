@@ -6,7 +6,7 @@ describe('Logger', () => {
   let logger: Logger;
 
   beforeAll(() => {
-    jest.useFakeTimers('modern');
+    jest.useFakeTimers();
     jest.setSystemTime(new Date(time));
 
     logger = new Logger();

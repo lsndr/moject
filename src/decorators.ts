@@ -1,6 +1,6 @@
 import { injectable, inject } from 'inversify';
-import { ProviderIdentifier } from './modules';
-import { Module, ModuleMeta } from './app';
+import { ProviderIdentifier } from './modules/types';
+import { Module, ModuleMeta } from './app/types';
 import { createModule } from './app/create-module';
 
 export function Inject(

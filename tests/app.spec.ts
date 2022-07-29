@@ -84,7 +84,7 @@ describe('App', () => {
     expect(testValue).toBe('testvalue');
   });
 
-  it('should fail to return a value, that was not exported', async () => {
+  it('should fail to return a value, that was not exported', () => {
     const providers: Provider[] = [
       {
         identifier: 'VALUE_IDENTIFIER',
@@ -166,7 +166,7 @@ describe('App', () => {
     expect(testValue).toBe('factoryvalue');
   });
 
-  it('should fail if unkown identifier is provided', async () => {
+  it('should fail if unkown identifier is provided', () => {
     @Module()
     class TestModule {}
 
@@ -178,7 +178,7 @@ describe('App', () => {
     );
   });
 
-  it('should fail to resolve a class that not marked with @Injectable decorator', async () => {
+  it('should fail to resolve a class that not marked with @Injectable decorator', () => {
     class TestClass {}
 
     @Module({
