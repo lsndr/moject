@@ -46,7 +46,6 @@ export type ModuleProvder = {
 
 export type ModuleMeta<C extends ModuleConstructor> = {
   imports: C[];
-  hooks: Constructor[];
   providers: Provider[];
   exports: (Provider | C)[];
 };

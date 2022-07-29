@@ -63,18 +63,6 @@ export class App {
     }
   }
 
-  private async invokeHooks() {
-    for (const container of this.containers.values()) {
-      for (let i = 0; i < container.meta.hooks.length; i++) {
-        const hook = container.meta.hooks[i];
-
-        await container.resolve(hook);
-
-        this.log(`Hook \`${hook.name}\` invoked`);
-      }
-    }
-  }
-
   private async runEventHandlers(event: AppEvents) {
     for (const container of this.containers.values()) {
       if (event === 'beforeStart' || event === 'beforeInit') {
@@ -104,16 +92,11 @@ export class App {
     this.log('Starting application...');
 
     await this.runEventHandlers('beforeStart');
+
     await this.runEventHandlers('beforeInit');
-
     await this.initModules();
-
     await this.runEventHandlers('afterInit');
-    await this.runEventHandlers('beforeHooks');
 
-    await this.invokeHooks();
-
-    await this.runEventHandlers('afterHooks');
     await this.runEventHandlers('afterStart');
 
     this.log('Application is running');

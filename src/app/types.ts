@@ -6,8 +6,6 @@ export type AppEvents =
   | 'afterStart'
   | 'beforeInit'
   | 'afterInit'
-  | 'beforeHooks'
-  | 'afterHooks'
   | 'beforeStop'
   | 'afterStop';
 export type AppEventHandler = () => unknown;

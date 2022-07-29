@@ -17,7 +17,6 @@ export function Module(options?: Partial<ModuleMeta<AppModuleConstructor>>) {
   return <T extends AppModuleConstructor>(constructor: T) => {
     decorate(injectable(), constructor);
     registry.set(constructor, {
-      hooks: [],
       imports: [],
       exports: [],
       providers: [],

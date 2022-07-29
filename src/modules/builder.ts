@@ -15,7 +15,6 @@ export class ModuleBuilder<C extends ModuleConstructor> {
     this.registry.set(constructor, {
       imports: [],
       providers: [],
-      hooks: [],
       exports: [],
       ...meta,
     });
@@ -26,7 +25,6 @@ export class ModuleBuilder<C extends ModuleConstructor> {
     const globalContainer = new ModuleContainer(GlobalModule, {
       imports: [],
       providers: options?.globalProviders || [],
-      hooks: [],
       exports: [],
     });
 

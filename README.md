@@ -30,7 +30,6 @@ Each module is an isolated DI container. Modules can be used to group related de
 
 @Module({
   imports: [/* modules to import */],
-  hooks: [/* hooks */],
   providers: [/* providers */],
   exports: [/* providers and modules to export */]
 })
@@ -45,14 +44,6 @@ export class AppModule {
 
   async afterInit() {
     // invoked after modules initialisation
-  }
-
-  async beforeHooks() {
-    // invoked before hooks
-  }
-
-  async afterHooks() {
-    // invoked after hooks
   }
 
   async beforeStop() {
@@ -175,17 +166,9 @@ class AppModule {
 }
 ```
 
-## Hooks
-
-Hooks are constructors that can not be injected anywhere but invoked once the application has bootstrapped.
-
-For instance, hooks can be used to register routes of your web application.
-
-See [examples](https://github.com/lsndr/moject/tree/master/examples).
-
 ## App Factory
 
-Use `App` class to initialise modules and run hooks as shown below:
+Use `App` class to initialise modules and start an app as shown below:
 
 ```typescript
 import { AppModule } from './app.module';
@@ -197,7 +180,7 @@ const app = App.create(AppModule);
 app.start().catch(console.error);
 ```
 
-Once `app.start` is called, all your modules get initialised, dependencies resolved, and hooks invoked.
+Once `app.start` is called, all your modules get initialised and dependencies resolved.
 
 ## Logger
 

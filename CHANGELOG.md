@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.0 - ?
+
+- hooks removed
+
 ## 0.1.1 - 2022-02-13
 
 - fix: hook invocation message
