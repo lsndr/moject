@@ -1,5 +1,12 @@
 import 'reflect-metadata';
 
-export * from './decorators';
-export { Provider } from './modules';
-export { App, IDENTIFIERS, AppLogger } from './app';
+export { Inject, Injectable, Module } from './decorators';
+export {
+  Provider,
+  ProviderScope,
+  ClassProviderConstructor,
+  ValueProviderConstructor,
+  FactoryProviderConstructor,
+  ProviderIdentifier,
+} from './modules';
+export { App, IDENTIFIERS, AppLogger, AppOptions, ModuleMeta } from './app';
