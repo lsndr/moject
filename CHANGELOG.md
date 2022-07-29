@@ -3,6 +3,8 @@
 ## 1.0.0 - ?
 
 - hooks removed
+- added createModule function
+- simplified and exported types
 
 ## 0.1.1 - 2022-02-13
 

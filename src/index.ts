@@ -10,3 +10,4 @@ export {
   ProviderIdentifier,
 } from './modules';
 export { App, IDENTIFIERS, AppLogger, AppOptions, ModuleMeta } from './app';
+export { createModule } from './create-module';

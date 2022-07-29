@@ -13,13 +13,13 @@ export type AppEventHandler = () => unknown;
 
 export type Module = BaseModule & Partial<Record<AppEvents, AppEventHandler>>;
 
-export interface AppModuleConstructor {
+export interface ModuleConstructor {
   beforeStart?: AppEventHandler;
   beforeInit?: AppEventHandler;
   new (...args: any): Module;
 }
 
-export type ModuleMeta = BaseModuleMeta<AppModuleConstructor>;
+export type ModuleMeta = BaseModuleMeta<ModuleConstructor>;
 
 export type AppOptions = {
   logger?: AppLogger | false;
