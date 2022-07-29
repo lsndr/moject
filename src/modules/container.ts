@@ -20,8 +20,7 @@ export class ModuleContainer<C extends Module = Module> {
 
     containersMap.set(this, this.container);
 
-    for (let i = 0; i < meta.providers.length; i++) {
-      const provider = meta.providers[i];
+    for (const provider of meta.providers) {
       const providerConstructor: ProviderConstructor =
         this.isProviderConstructor(provider)
           ? provider

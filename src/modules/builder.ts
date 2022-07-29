@@ -45,8 +45,8 @@ export class ModuleBuilder<C extends Module> {
       containers.set(moduleConstructor, container);
 
       if (typeof meta.imports !== 'undefined') {
-        for (let i = 0; i < meta.imports.length; i++) {
-          build(meta.imports[i]);
+        for (const importedModule of meta.imports) {
+          build(importedModule);
         }
       }
     };
@@ -62,15 +62,14 @@ export class ModuleBuilder<C extends Module> {
 
   private connectContainers(containers: Map<C, ModuleContainer<C>>) {
     const bindImports = (container: ModuleContainer<C>, imports: C[]) => {
-      for (let i = 0; i < imports.length; i++) {
-        const imported = containers.get(imports[i]);
+      for (const importedModule of imports) {
+        const importedContainer = containers.get(importedModule);
 
-        if (typeof imported === 'undefined') {
+        if (typeof importedContainer === 'undefined') {
           continue;
         }
 
-        for (let j = 0; j < imported.meta.exports.length; j++) {
-          const provider = imported.meta.exports[j];
+        for (const provider of importedContainer.meta.exports) {
           const isModule = this.isModule(provider);
 
           if (!isModule) {
@@ -81,9 +80,9 @@ export class ModuleBuilder<C extends Module> {
                 ? provider.identifier
                 : provider;
 
-            container.bind(identifier, () => imported.get(identifier));
+            container.bind(identifier, () => importedContainer.get(identifier));
           } else {
-            bindImports(container, imported.meta.imports);
+            bindImports(container, importedContainer.meta.imports);
           }
         }
       }
