@@ -1,4 +1,4 @@
-import { Module, App, Injectable, Provider } from '../';
+import { Module, App, Injectable, Provider, createModule } from '../src';
 
 describe('App', () => {
   it('should log start process', async () => {
@@ -9,17 +9,11 @@ describe('App', () => {
       debug: jest.fn(),
     };
 
-    @Injectable()
-    class Hook {}
-
-    @Module({
-      hooks: [],
-    })
+    @Module()
     class TestModule1 {}
 
     @Module({
       imports: [TestModule1],
-      hooks: [Hook],
     })
     class TestModule2 {}
 
@@ -29,7 +23,7 @@ describe('App', () => {
 
     await app.start();
 
-    expect(logger.log).toBeCalledTimes(11);
+    expect(logger.log).toBeCalledTimes(8);
     expect(logger.error).toBeCalledTimes(0);
     expect(logger.warn).toBeCalledTimes(0);
     expect(logger.debug).toBeCalledTimes(0);
@@ -43,17 +37,11 @@ describe('App', () => {
       debug: jest.fn(),
     };
 
-    @Injectable()
-    class Hook {}
-
-    @Module({
-      hooks: [],
-    })
+    @Module()
     class TestModule1 {}
 
     @Module({
       imports: [TestModule1],
-      hooks: [Hook],
     })
     class TestModule2 {}
 
@@ -69,37 +57,6 @@ describe('App', () => {
     expect(logger.error).toBeCalledTimes(0);
     expect(logger.warn).toBeCalledTimes(0);
     expect(logger.debug).toBeCalledTimes(0);
-  });
-
-  it('should invoke hooks on start', async () => {
-    let hooksInvoked = 0;
-
-    @Injectable()
-    class Hook1 {
-      constructor() {
-        hooksInvoked++;
-      }
-    }
-
-    @Injectable()
-    class Hook2 {
-      constructor() {
-        hooksInvoked++;
-      }
-    }
-
-    @Module({
-      hooks: [Hook1, Hook2],
-    })
-    class TestModule {}
-
-    const app = App.create(TestModule, {
-      logger: false,
-    });
-
-    await app.start();
-
-    expect(hooksInvoked).toBe(2);
   });
 
   it('should return an imported value', async () => {
@@ -127,7 +84,7 @@ describe('App', () => {
     expect(testValue).toBe('testvalue');
   });
 
-  it('should fail to return a value, that was not exported', async () => {
+  it('should fail to return a value, that was not exported', () => {
     const providers: Provider[] = [
       {
         identifier: 'VALUE_IDENTIFIER',
@@ -209,7 +166,7 @@ describe('App', () => {
     expect(testValue).toBe('factoryvalue');
   });
 
-  it('should fail if unkown identifier is provided', async () => {
+  it('should fail if unkown identifier is provided', () => {
     @Module()
     class TestModule {}
 
@@ -221,7 +178,7 @@ describe('App', () => {
     );
   });
 
-  it('should fail to resolve a class that not marked with @Injectable decorator', async () => {
+  it('should fail to resolve a class that not marked with @Injectable decorator', () => {
     class TestClass {}
 
     @Module({
@@ -235,5 +192,19 @@ describe('App', () => {
     expect(testInstance).rejects.toThrow(
       'Missing required @injectable annotation in: TestClass.',
     );
+  });
+
+  it('should properly resolve dynamic module providers', async () => {
+    @Injectable()
+    class ClassToInject {}
+
+    const dynamicModule = createModule(class {}, {
+      providers: [ClassToInject],
+    });
+
+    const app = App.create(dynamicModule);
+    const testInstance = await app.get(ClassToInject);
+
+    expect(testInstance).toBeInstanceOf(ClassToInject);
   });
 });

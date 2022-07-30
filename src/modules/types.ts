@@ -6,7 +6,7 @@ export type BuildOptions = {
 
 export type Constructor<T = unknown> = new (...args: never[]) => T;
 
-export type Module = object;
+export type ModuleInstace = object;
 
 export type ProviderIdentifier = symbol | string | Constructor;
 
@@ -37,16 +37,15 @@ export type ProviderConstructor =
 
 export type Provider = Constructor | ProviderConstructor;
 
-export type ModuleConstructor = Constructor<Module>;
+export type Module = Constructor<ModuleInstace>;
 
 export type ModuleProvder = {
   container: Container;
-  meta: ModuleMeta<ModuleConstructor>;
+  meta: ModuleMeta<Module>;
 };
 
-export type ModuleMeta<C extends ModuleConstructor> = {
+export type ModuleMeta<C extends Module> = {
   imports: C[];
-  hooks: Constructor[];
   providers: Provider[];
   exports: (Provider | C)[];
 };

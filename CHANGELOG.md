@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.0 - ?
+
+- hooks removed
+- added createModule function
+- simplified and exported types
+- added ModuleRef class
+
 ## 0.1.1 - 2022-02-13
 
 - fix: hook invocation message

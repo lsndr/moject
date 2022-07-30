@@ -1,7 +1,7 @@
 import { Container } from 'inversify';
 import {
   Constructor,
-  ModuleConstructor,
+  Module,
   ModuleMeta,
   ProviderIdentifier,
   ProviderConstructor,
@@ -10,7 +10,7 @@ import {
 
 const containersMap: WeakMap<ModuleContainer, Container> = new WeakMap();
 
-export class ModuleContainer<C extends ModuleConstructor = ModuleConstructor> {
+export class ModuleContainer<C extends Module = Module> {
   private module?: InstanceType<C>;
   private readonly container: Container;
 
@@ -20,8 +20,7 @@ export class ModuleContainer<C extends ModuleConstructor = ModuleConstructor> {
 
     containersMap.set(this, this.container);
 
-    for (let i = 0; i < meta.providers.length; i++) {
-      const provider = meta.providers[i];
+    for (const provider of meta.providers) {
       const providerConstructor: ProviderConstructor =
         this.isProviderConstructor(provider)
           ? provider

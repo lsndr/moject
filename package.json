@@ -1,6 +1,6 @@
 {
   "name": "moject",
-  "version": "0.1.1",
+  "version": "1.0.0",
   "description": "Moject is a dependency injection and app factory package built around the modules idea of Angular and NestJs.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -28,19 +28,21 @@
     "**/*.{ts,js,json}": "eslint --fix --max-warnings=0"
   },
   "devDependencies": {
-    "@types/jest": "^27.4.0",
-    "@typescript-eslint/eslint-plugin": "^5.9.0",
-    "@typescript-eslint/parser": "^5.9.0",
-    "eslint": "^8.6.0",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-prettier": "^4.0.0",
-    "jest": "^27.4.5",
-    "lint-staged": "^12.1.5",
+    "@types/jest": "^28.1.6",
+    "@typescript-eslint/eslint-plugin": "^5.31.0",
+    "@typescript-eslint/parser": "^5.31.0",
+    "eslint": "^8.20.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-import-resolver-typescript": "^3.3.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "jest": "^28.1.3",
+    "lint-staged": "^13.0.3",
     "pre-commit": "^1.2.2",
-    "prettier": "^2.5.1",
-    "ts-jest": "^27.1.2",
-    "typescript": "^4.5.4",
-    "rimraf": "^3.0.2"
+    "prettier": "^2.7.1",
+    "rimraf": "^3.0.2",
+    "ts-jest": "^28.0.7",
+    "typescript": "^4.7.4"
   },
   "dependencies": {
     "inversify": "^6.0.1",

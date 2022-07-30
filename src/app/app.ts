@@ -1,24 +1,21 @@
-import { IDENTIFIERS } from '.';
-import { ProviderIdentifier } from './../modules';
+import { IDENTIFIERS } from './identifiers';
+import { ProviderIdentifier } from '../modules/types';
 import { ModuleBuilder } from './../modules/builder';
 import { ModuleContainer } from './../modules/container';
-import { registry } from './../registry';
+import { registry } from './registry';
 import { Logger } from './services/logger';
-import { AppEvents, AppOptions, AppModuleConstructor } from './types';
+import { AppEvents, AppOptions, Module } from './types';
 
 export class App {
   private lastReportAt?: number;
 
   private constructor(
-    private readonly containers: Map<
-      AppModuleConstructor,
-      ModuleContainer<AppModuleConstructor>
-    >,
-    private readonly rootModule: AppModuleConstructor,
+    private readonly containers: Map<Module, ModuleContainer<Module>>,
+    private readonly rootModule: Module,
     private readonly options: Required<AppOptions>,
   ) {}
 
-  static create(rootModule: AppModuleConstructor, options?: AppOptions) {
+  static create(rootModule: Module, options?: AppOptions) {
     const defaultLogger = new Logger();
     const config: Required<AppOptions> = {
       logger: defaultLogger,
@@ -27,7 +24,7 @@ export class App {
 
     const logger = config.logger || defaultLogger;
 
-    const builder = new ModuleBuilder<AppModuleConstructor>(registry);
+    const builder = new ModuleBuilder<Module>(registry);
     const containers = builder.build(rootModule, {
       globalProviders: [{ identifier: IDENTIFIERS.LOGGER, useValue: logger }],
     });
@@ -63,18 +60,6 @@ export class App {
     }
   }
 
-  private async invokeHooks() {
-    for (const container of this.containers.values()) {
-      for (let i = 0; i < container.meta.hooks.length; i++) {
-        const hook = container.meta.hooks[i];
-
-        await container.resolve(hook);
-
-        this.log(`Hook \`${hook.name}\` invoked`);
-      }
-    }
-  }
-
   private async runEventHandlers(event: AppEvents) {
     for (const container of this.containers.values()) {
       if (event === 'beforeStart' || event === 'beforeInit') {
@@ -104,16 +89,11 @@ export class App {
     this.log('Starting application...');
 
     await this.runEventHandlers('beforeStart');
+
     await this.runEventHandlers('beforeInit');
-
     await this.initModules();
-
     await this.runEventHandlers('afterInit');
-    await this.runEventHandlers('beforeHooks');
 
-    await this.invokeHooks();
-
-    await this.runEventHandlers('afterHooks');
     await this.runEventHandlers('afterStart');
 
     this.log('Application is running');

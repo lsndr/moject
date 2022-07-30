@@ -1,4 +1,4 @@
-import { Logger } from './logger';
+import { Logger } from '../src';
 import * as util from 'util';
 
 describe('Logger', () => {
@@ -6,7 +6,7 @@ describe('Logger', () => {
   let logger: Logger;
 
   beforeAll(() => {
-    jest.useFakeTimers('modern');
+    jest.useFakeTimers();
     jest.setSystemTime(new Date(time));
 
     logger = new Logger();

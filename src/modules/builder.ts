@@ -1,10 +1,10 @@
-import { BuildOptions } from '.';
+import { BuildOptions, Module, ModuleMeta } from './types';
 import { ModuleContainer } from './container';
-import { ModuleConstructor, ModuleMeta } from './types';
+import { ModuleRef } from './module-ref';
 
 class GlobalModule {}
 
-export class ModuleBuilder<C extends ModuleConstructor> {
+export class ModuleBuilder<C extends Module> {
   private readonly registry: Map<C, ModuleMeta<C>>;
 
   constructor(registry: Map<C, ModuleMeta<C>>) {
@@ -15,7 +15,6 @@ export class ModuleBuilder<C extends ModuleConstructor> {
     this.registry.set(constructor, {
       imports: [],
       providers: [],
-      hooks: [],
       exports: [],
       ...meta,
     });
@@ -26,7 +25,6 @@ export class ModuleBuilder<C extends ModuleConstructor> {
     const globalContainer = new ModuleContainer(GlobalModule, {
       imports: [],
       providers: options?.globalProviders || [],
-      hooks: [],
       exports: [],
     });
 
@@ -42,13 +40,17 @@ export class ModuleBuilder<C extends ModuleConstructor> {
       }
 
       const container = new ModuleContainer(moduleConstructor, meta);
+
       container.setParent(globalContainer);
+      container.bind(ModuleRef, () => {
+        return new ModuleRef(container);
+      });
 
       containers.set(moduleConstructor, container);
 
       if (typeof meta.imports !== 'undefined') {
-        for (let i = 0; i < meta.imports.length; i++) {
-          build(meta.imports[i]);
+        for (const importedModule of meta.imports) {
+          build(importedModule);
         }
       }
     };
@@ -64,15 +66,14 @@ export class ModuleBuilder<C extends ModuleConstructor> {
 
   private connectContainers(containers: Map<C, ModuleContainer<C>>) {
     const bindImports = (container: ModuleContainer<C>, imports: C[]) => {
-      for (let i = 0; i < imports.length; i++) {
-        const imported = containers.get(imports[i]);
+      for (const importedModule of imports) {
+        const importedContainer = containers.get(importedModule);
 
-        if (typeof imported === 'undefined') {
+        if (typeof importedContainer === 'undefined') {
           continue;
         }
 
-        for (let j = 0; j < imported.meta.exports.length; j++) {
-          const provider = imported.meta.exports[j];
+        for (const provider of importedContainer.meta.exports) {
           const isModule = this.isModule(provider);
 
           if (!isModule) {
@@ -83,9 +84,9 @@ export class ModuleBuilder<C extends ModuleConstructor> {
                 ? provider.identifier
                 : provider;
 
-            container.bind(identifier, () => imported.get(identifier));
+            container.bind(identifier, () => importedContainer.get(identifier));
           } else {
-            bindImports(container, imported.meta.imports);
+            bindImports(container, importedContainer.meta.imports);
           }
         }
       }

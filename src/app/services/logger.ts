@@ -1,5 +1,5 @@
+import { injectable } from 'inversify';
 import { debuglog } from 'util';
-import { Injectable } from '../..';
 
 export interface AppLogger {
   log(message: string, ...data: any[]): void;
@@ -8,7 +8,7 @@ export interface AppLogger {
   debug(section: string, message: string, ...data: any[]): void;
 }
 
-@Injectable()
+@injectable()
 export class Logger implements AppLogger {
   log(message: string, ...data: any[]): void {
     console.log(

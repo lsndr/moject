@@ -1,7 +1,7 @@
-import { injectable, inject, decorate } from 'inversify';
-import { ModuleMeta, ProviderIdentifier } from './modules';
-import { registry } from './registry';
-import { AppModuleConstructor } from './app/types';
+import { injectable, inject } from 'inversify';
+import { ProviderIdentifier } from './modules/types';
+import { Module, ModuleMeta } from './app/types';
+import { createModule } from './app/create-module';
 
 export function Inject(
   identifier: ProviderIdentifier,
@@ -13,15 +13,8 @@ export function Injectable() {
   return injectable();
 }
 
-export function Module(options?: Partial<ModuleMeta<AppModuleConstructor>>) {
-  return <T extends AppModuleConstructor>(constructor: T) => {
-    decorate(injectable(), constructor);
-    registry.set(constructor, {
-      hooks: [],
-      imports: [],
-      exports: [],
-      providers: [],
-      ...options,
-    });
+export function Module(options?: Partial<ModuleMeta>) {
+  return <T extends Module>(constructor: T) => {
+    createModule(constructor, options);
   };
 }
