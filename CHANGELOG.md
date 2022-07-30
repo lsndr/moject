@@ -5,6 +5,7 @@
 - hooks removed
 - added createModule function
 - simplified and exported types
+- added ModuleRef class
 
 ## 0.1.1 - 2022-02-13
 

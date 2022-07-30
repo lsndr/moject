@@ -17,6 +17,8 @@ export { AppOptions, ModuleMeta } from './app/types';
 
 export { createModule } from './app/create-module';
 
-export { IDENTIFIERS } from './app/identifiers';
+export { IDENTIFIERS, Identifiers } from './app/identifiers';
 
 export { Logger, AppLogger } from './app/services/logger';
+
+export { ModuleRef } from './modules/module-ref';

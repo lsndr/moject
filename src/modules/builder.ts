@@ -1,5 +1,6 @@
 import { BuildOptions, Module, ModuleMeta } from './types';
 import { ModuleContainer } from './container';
+import { ModuleRef } from './module-ref';
 
 class GlobalModule {}
 
@@ -39,7 +40,11 @@ export class ModuleBuilder<C extends Module> {
       }
 
       const container = new ModuleContainer(moduleConstructor, meta);
+
       container.setParent(globalContainer);
+      container.bind(ModuleRef, () => {
+        return new ModuleRef(container);
+      });
 
       containers.set(moduleConstructor, container);
 
