@@ -50,5 +50,11 @@ module.exports = {
         },
       },
     },
+    {
+      files: ['examples/**/*.ts'],
+      rules: {
+        'import/no-unresolved': 'off',
+      },
+    },
   ],
 };
